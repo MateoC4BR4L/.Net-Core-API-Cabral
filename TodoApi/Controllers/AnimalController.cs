@@ -16,7 +16,7 @@ public class AnimalController : ControllerBase
         if(animales_list.Count >= 1)
             return animales_list;
         
-        Response.StatusCode = 404;
+        Response.StatusCode = 204;
         return new
         {
             success = false, 
@@ -47,7 +47,7 @@ public class AnimalController : ControllerBase
     public dynamic guardar(Animal animal)
     {
         animales_list.Add(animal);
-
+        Response.StatusCode = 201;
         return new
         {
             success = true,
@@ -58,9 +58,26 @@ public class AnimalController : ControllerBase
     
     [HttpPut]
     [Route("actualizar")]
-    public dynamic actualizar(string id)
+    public dynamic actualizar(string id, [FromBody] Animal datos)
     {
-        
+        foreach (Animal i in animales_list)
+        {
+            if (id == i.id)
+            {
+                i.especie = datos.especie;
+                i.nombre = datos.nombre;
+                i.vacunado = datos.vacunado;
+
+                return Response.StatusCode = 204;
+            }
+        }
+
+        Response.StatusCode = 404;
+        return new
+        {
+            success = false,
+            message = "El ID no se encuentra en nuestra base de datos."
+        };
     }
     
 }
