@@ -80,4 +80,25 @@ public class AnimalController : ControllerBase
         };
     }
     
+    [HttpDelete]
+    [Route("eliminar")]
+    public dynamic actualizar(string id)
+    {
+        foreach (Animal i in animales_list)
+        {
+            if (id == i.id)
+            {
+                animales_list.Remove(i);
+                return Response.StatusCode = 204;
+            }
+        }
+
+        Response.StatusCode = 404;
+        return new
+        {
+            success = false,
+            message = "El ID no se encuentra en nuestra base de datos."
+        };
+    }
+    
 }
